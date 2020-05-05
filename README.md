@@ -3,6 +3,7 @@
 Element Planning:
 
 I am thinking we should have 3 tables(just for planing) if it doesn't make sense let me know
+
 User:
 Store data on user information, and scheduled ride
 
@@ -22,6 +23,7 @@ also creator of the ride and the users who will be joining the ride
 
 
 Request:
+
 Is similar to transaction table we did for venmo
   (how should this be done? other users request the owner of ride to join? owner request other to join? either one or both which one?)
 contain information on the request to join Ride
@@ -36,6 +38,7 @@ will need to think and define sender and receiver
 
 
 Basic Flow/interaction
+
   -first time user, no stored id -> prompt to create a user -> make a  
    post request ->store the user id in the app(change to credential if do auth)
   -have user id ->prompt to search for ride-> get request->return relevant    
