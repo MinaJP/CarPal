@@ -2,9 +2,10 @@
 
 Element Planning:
 
-I am thinking we should have 3 tables(just for planing) if it doesn't make sense let me know
+I am thinking we should have 3 tables(this is just planing if u don't like or it doesn't make sense let me know)
 
 User:
+
 Store data on user information, and scheduled ride
 
 Client should be able to create a user: -> user id is stored in frontend
@@ -17,7 +18,9 @@ can be implement by
 -using parameter and query string (more automate and can handle different combination of parameter work)
 -using / / like was done in HW (we know how, might cause error if the input not exact)
 
+
 Ride:
+
 store information on ride id, date,  time, origin, destination, and mode of transportation of the ride
 also creator of the ride and the users who will be joining the ride
 
@@ -32,6 +35,7 @@ So contain request_id, sender_id, receiver_id, ride_id, accepted, and message
 will need to think and define sender and receiver
 
   Need:
+  
     get request by user_id(sender and receiver)
     post request(create post)
     post request(accepted request)
