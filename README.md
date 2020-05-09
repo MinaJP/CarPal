@@ -35,7 +35,7 @@ So contain request_id, sender_id, receiver_id, ride_id, accepted, and message
 will need to think and define sender and receiver
 
   Need:
-  
+
     get request by user_id(sender and receiver)
     post request(create post)
     post request(accepted request)
@@ -61,16 +61,123 @@ Basic Flow/interaction
 
 
 API Specification:
+  get a user
+  GET "carshare/user/{user_id}/"
+  Response
+    {
+    "success": true,
+    "data": {            
+          "id": <ID>,
+          "username":<USER INPUT FOR USERNAME>
+          "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
+          "requests": [<SERIALIZED REQUEST>, ... ]
+        }
+  create a user
+  POST "carshare/user/"
+  Request
+    {
+      "username": <USER INPUT>
+    }
 
-GET "carshare/user/{id}/"
-Response{
-  "success": true,
-  "data": {            
-        "id": <ID>,
-        "username":<USER INPUT FOR USERNAME>
-        "email":<USER INPUT>
-        "scheduled_ride"
-        "requests"
+  Response
+    {
+    "success": true,
+    "data": {            
+          "id": <ID>,
+          "username":<USER INPUT FOR USERNAME>
+          "scheduled_ride": [],
+          "requests": []
+        }
+
+  Get relevant ride available
+  GET "carshare/ride/"
+  parameter -d query by destination
+  parameter -s query by time (unix)
+  NOTE: maybe we can choose all time within the time interval EX 1 day
+  Response
+    {
+      "success": true,
+      "data": {
+          "id": <id>,
+          "destination": <USER INPUT FOR DESTINATION>,
+          "scheduled": <USER INPUT FOR scheduled>,
+          "completed": <USER INPUT FOR completed>,
+          "owner": <USER ID>
+          "details":<USER INPUT FOR details>,
+          "members" [<SERIALIZED USER WITHOUT RIDE and REQUEST FIELD>, ... ]
+          "request": [<SERIALIZED REQUEST WITHOUT RIDE FIELD>, ... ]    
+      }
+    }
+
+    Create ride
+    POST "carshare/ride/{user_id}/"
+    Request
+      {
+        "destination":<USER INPUT FOR DESTINATION>,
+        "scheduled":<USER INPUT FOR scheduled>,
+        "details":<USER INPUT FOR details>
+      }
+
+    Response
+      {
+        "success": true,
+        "data": {
+            "id": <id>,
+            "destination": <USER INPUT FOR DESTINATION>,
+            "scheduled": <USER INPUT FOR scheduled>,
+            "completed": False,
+            "creator": <USER_ID>
+            "members" []
+            "request": []    
+        }
+      }
+      Delete scheduled ride plan
+      DELETE "carshare/ride/{user_id}/{ride_id}/"
+      NOTE: Verify that user_id is the owner of the ride
+        {
+          "success": true,
+          "data": <DELETED RIDE>
+        }
 
 
-}
+      Create Request to join ride
+      POST "carshare/request/{ride_id}"
+      user who want to join send request
+        Request
+          {
+            "sender_id":<USER ID>
+            "message":<USER INPUT FOR MESSAGE>
+          }
+        Response
+          {
+            "success": true,
+            "data": {
+                "id": <ID>,
+                "timestamp": <NOW>,
+                "sender_id": <USER INPUT FOR SENDER_ID>,
+                "owner_id": <ID OF OWNER OF THE RIDE>,
+                "ride_id": <RIDE ID>,
+                "message": <USER INPUT FOR MESSAGE>,
+                "accepted": null
+              }    
+            }
+
+      Accept "carshare/request/{request_id}"
+        Request
+          {
+            "accepted": true or false
+          }
+
+        Response
+          {
+            "success": true,
+            "data": {
+                "id": <ID>,
+                "timestamp": <NOW> / update timestamp to time of accept/deny
+                "sender_id": <USER INPUT FOR SENDER_ID>,
+                "owner_id": <ID OF OWNER OF THE RIDE>,
+                "ride_id": <RIDE ID>,
+                "message": <USER INPUT FOR MESSAGE>,
+                "accepted": <USER INPUT FOR ACCEPTED>
+              }    
+            }
