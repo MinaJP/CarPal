@@ -61,53 +61,53 @@ Basic Flow/interaction
 
 
 API Specification:
-  get a user
-  GET "carshare/user/{user_id}/"
-  Response
-    {
-    "success": true,
-    "data": {            
-          "id": <ID>,
-          "username":<USER INPUT FOR USERNAME>
-          "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
-          "requests": [<SERIALIZED REQUEST>, ... ]
-        }
-  create a user
-  POST "carshare/user/"
-  Request
-    {
-      "username": <USER INPUT>
-    }
-
-  Response
-    {
-    "success": true,
-    "data": {            
-          "id": <ID>,
-          "username":<USER INPUT FOR USERNAME>
-          "scheduled_ride": [],
-          "requests": []
-        }
-
-  Get relevant ride available
-  GET "carshare/ride/"
-  parameter -d query by destination
-  parameter -s query by time (unix)
-  NOTE: maybe we can choose all time within the time interval EX 1 day
-  Response
-    {
+    get a user
+    GET "carshare/user/{user_id}/"
+    Response
+      {
       "success": true,
-      "data": {
-          "id": <id>,
-          "destination": <USER INPUT FOR DESTINATION>,
-          "scheduled": <USER INPUT FOR scheduled>,
-          "completed": <USER INPUT FOR completed>,
-          "owner": <USER ID>
-          "details":<USER INPUT FOR details>,
-          "members" [<SERIALIZED USER WITHOUT RIDE and REQUEST FIELD>, ... ]
-          "request": [<SERIALIZED REQUEST WITHOUT RIDE FIELD>, ... ]    
+      "data": {            
+            "id": <ID>,
+            "username":<USER INPUT FOR USERNAME>
+            "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
+            "requests": [<SERIALIZED REQUEST>, ... ]
+          }
+    create a user
+    POST "carshare/user/"
+    Request
+      {
+        "username": <USER INPUT>
       }
-    }
+
+    Response
+      {
+      "success": true,
+      "data": {            
+            "id": <ID>,
+            "username":<USER INPUT FOR USERNAME>
+            "scheduled_ride": [],
+            "requests": []
+          }
+
+    Get relevant ride available
+    GET "carshare/ride/"
+    parameter -d query by destination
+    parameter -s query by time (unix)
+    NOTE: maybe we can choose all time within the time interval EX 1 day
+    Response
+      {
+        "success": true,
+        "data": {
+            "id": <id>,
+            "destination": <USER INPUT FOR DESTINATION>,
+            "scheduled": <USER INPUT FOR scheduled>,
+            "completed": <USER INPUT FOR completed>,
+            "owner": <USER ID>
+            "details":<USER INPUT FOR details>,
+            "members" [<SERIALIZED USER WITHOUT RIDE and REQUEST FIELD>, ... ]
+            "request": [<SERIALIZED REQUEST WITHOUT RIDE FIELD>, ... ]    
+        }
+      }
 
     Create ride
     POST "carshare/ride/{user_id}/"
