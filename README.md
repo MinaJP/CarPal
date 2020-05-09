@@ -61,6 +61,7 @@ Basic Flow/interaction
 
 
 API Specification:
+
     get a user
     GET "carshare/user/{user_id}/"
     Response
