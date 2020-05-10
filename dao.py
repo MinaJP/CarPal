@@ -34,8 +34,13 @@ def create_ride(user_id, origin, destination, time):
     pass
 
 
-def delete_ride_by_id(user_id, ride_id):
+def delete_ride_by_id(ride_id):
     pass
+
+
+def get_ride_by_id(ride_id):
+    pass
+
 
 #add another user to members list of a car ride
 def update_ride_by_id(ride_id, member):
