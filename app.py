@@ -1,3 +1,4 @@
+
 from flask import Flask, request
 import dao
 import json
@@ -89,9 +90,8 @@ def create_ride():
 # would be good if can verify if the user_id match the owner of the ride id
 @app.route("/carshare/ride/{user_id}/{ride_id}/", methods=['DELETE'])
 def delete_ride():
-    ride = dao.get_ride_by_id(ride_id)
+    ride = dao.delete_by_id(ride_id)
     if ride is not None:
-        dao.delete_by_id(ride_id)
         return success_response(ride)
     return failure_response("ride not found")
 
@@ -101,6 +101,7 @@ def request_ride(ride_id):
     ride = dao.get_ride_by_id(ride_id)
     if ride is None:
         return failure_response("ride not exist")
+    receiver_id = ride["creator"]
     body = json.loads(request.data)
     key = ("sender_id", "message")
     check_key, error = check_key(key, body)
@@ -111,7 +112,7 @@ def request_ride(ride_id):
     if user in None:
         return failure_response("not valid user id")
     message = body["message"]
-    return success(dao.create_request(ride_id, sender_id, message))
+    return success(dao.create_request(ride_id, sender_id, receiver_id, message))
 
 
 @app.route("/carshare/request/<int:request_id>", methods=['POST'])
@@ -127,6 +128,10 @@ def update_request(request_id):
     if not check_key:
         return failure_response(error)
     re = body["accepted"]
+    if re:
+        up = dao.update_ride_by_id(ride_id, member_id)
+        if up is None:
+            return failure_response("invalid ride or sender_id")
     return success_response(dao.update_request_by_id(request_id, re))
 
 
