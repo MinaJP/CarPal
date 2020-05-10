@@ -92,6 +92,7 @@ API Specification:
 
     Get relevant ride available
     GET "carshare/ride/"
+    parameter -o query by origin
     parameter -d query by destination
     parameter -s query by time (unix)
     NOTE: maybe we can choose all time within the time interval EX 1 day
@@ -100,6 +101,7 @@ API Specification:
         "success": true,
         "data": {
             "id": <id>,
+            "origin": <USER INPUT FOR ORIGIN>
             "destination": <USER INPUT FOR DESTINATION>,
             "scheduled": <USER INPUT FOR scheduled>,
             "completed": <USER INPUT FOR completed>,
@@ -114,9 +116,9 @@ API Specification:
     POST "carshare/ride/{user_id}/"
     Request
       {
+        "origin": <USER INPUT for ORIGIN>
         "destination":<USER INPUT FOR DESTINATION>,
         "scheduled":<USER INPUT FOR scheduled>,
-        "details":<USER INPUT FOR details>
       }
 
     Response
