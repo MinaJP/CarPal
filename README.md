@@ -101,7 +101,7 @@ API Specification:
         "success": true,
         "data": {
             "id": <id>,
-            "origin": <USER INPUT FOR ORIGIN>
+            "origin": <USER INPUT FOR ORIGIN>,
             "destination": <USER INPUT FOR DESTINATION>,
             "scheduled": <USER INPUT FOR scheduled>,
             "completed": <USER INPUT FOR completed>,
@@ -126,6 +126,7 @@ API Specification:
         "success": true,
         "data": {
             "id": <id>,
+            "origin": <USER INPUT FOR ORIGIN>,
             "destination": <USER INPUT FOR DESTINATION>,
             "scheduled": <USER INPUT FOR scheduled>,
             "completed": False,
