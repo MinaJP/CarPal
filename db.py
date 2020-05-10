@@ -11,9 +11,9 @@ class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
-    requests_sent = db.relationship("requests", cascade = delete, foreign_keys = 'requests.sender_id' )
-    requests_received = db.relationship("requests", cascade= delete, foreign_keys = 'receiver_id')
-    rides_created = db.relationship("rides", cascade = delete)
+    requests_sent = db.relationship("Request", cascade = delete, foreign_keys = 'requests.sender_id' )
+    requests_received = db.relationship("Request", cascade= delete, foreign_keys = 'requests.receiver_id')
+    rides_created = db.relationship("Ride", cascade = delete)
     rides_joined = db.relationship("Ride", secondary = association_table_1, back_populates = "members")
 
 
@@ -25,11 +25,15 @@ class Ride(db.Model):
     scheduled = db.Column(db.Integer, nullable = False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     members = db.relationship("User", secondary = association_table_1, back_populates = "rides_joined")
-    requests = db.relationship("rides", cascade = delete)
+    requests = db.relationship("Ride", cascade = delete)
 
 
 class Request(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.Integer, nullable = False)
     sender_id = db.relationship(db.Integer, db.ForeignKey("user.id"))
     receiver_id = db.relationship(db.Integer, db.ForeignKey("user.id"))
+    ride_id = db.relationship(db.Integer, db.ForeignKey("rides.id"))
+    message = db.Column(db.String, nullable = False)
+    accepted = db.Column(db.Bool)
