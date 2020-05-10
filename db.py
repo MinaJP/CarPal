@@ -18,6 +18,7 @@ class User(db.Model):
     rides_created = db.relationship("Ride", cascade = delete)
     rides_joined = db.relationship("Ride", secondary = association_table_1, back_populates = "members")
 
+
     def serialize(self):
         return {
         "id": self.id,
@@ -27,6 +28,7 @@ class User(db.Model):
         "rides_created": [r.serialize2() for r in self.rides_created],
         "rides_joined": [r.serialize2() for r in self.rides_joined],
         }
+
 
     def serialize2(self):
         return{
@@ -42,9 +44,10 @@ class Ride(db.Model):
     origin = db.Column(db.String, nullable = False)
     destination = db.Column(db.String, nullable = False)
     scheduled = db.Column(db.Integer, nullable = False)
-    creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    creator = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     members = db.relationship("User", secondary = association_table_1, back_populates = "rides_joined")
     requests = db.relationship("Ride", cascade = delete)
+
 
     def serialize(self):
         return {
@@ -72,8 +75,8 @@ class Request(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.Integer, nullable = False)
-    sender_id = db.relationship(db.Integer, db.ForeignKey("user.id"))
-    receiver_id = db.relationship(db.Integer, db.ForeignKey("user.id"))
+    sender_id = db.relationship(db.Integer, db.ForeignKey("users.id"))
+    receiver_id = db.relationship(db.Integer, db.ForeignKey("users.id"))
     ride_id = db.relationship(db.Integer, db.ForeignKey("rides.id"))
     message = db.Column(db.String, nullable = False)
     accepted = db.Column(db.Bool)
