@@ -7,6 +7,8 @@ association_table_1 = db.Table("user-ride", db.Model.metadata,
     db.Column("ride_id", db.Integer, db.ForeignKey("rides.id"))
 )
 
+
+
 class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
@@ -15,6 +17,23 @@ class User(db.Model):
     requests_received = db.relationship("Request", cascade= delete, foreign_keys = 'requests.receiver_id')
     rides_created = db.relationship("Ride", cascade = delete)
     rides_joined = db.relationship("Ride", secondary = association_table_1, back_populates = "members")
+
+    def serialize(self):
+        return {
+        "id": self.id,
+        "username": self.username,
+        "requests_sent": [r.serialize() for r in self.requests_sent],
+        "requests_received": [r.serialize() for r in self.requests_received],
+        "rides_created": [r.serialize2() for r in self.rides_created],
+        "rides_joined": [r.serialize2() for r in self.rides_joined],
+        }
+
+    def serialize2(self):
+        return{
+        "id": self.id,
+        "username": self.username
+        }
+
 
 
 class Ride(db.Model):
@@ -27,6 +46,27 @@ class Ride(db.Model):
     members = db.relationship("User", secondary = association_table_1, back_populates = "rides_joined")
     requests = db.relationship("Ride", cascade = delete)
 
+    def serialize(self):
+        return {
+        "id": self.id,
+        "origin": self.origin,
+        "destination": self.destination,
+        "scheduled": self.scheduled,
+        "creator": self.creator,
+        "members": [m.serialize2() for m in self.members],
+        "requests": [request.serialize() for request in self.requests]
+        }
+
+
+    def serialize2(self):
+        return {
+        "id": self.id,
+        "origin": self.origin,
+        "destination": self.destination,
+        "scheduled": self.scheduled,
+        }
+
+
 
 class Request(db.Model):
     __tablename__ = "requests"
@@ -37,3 +77,17 @@ class Request(db.Model):
     ride_id = db.relationship(db.Integer, db.ForeignKey("rides.id"))
     message = db.Column(db.String, nullable = False)
     accepted = db.Column(db.Bool)
+
+
+    def serialize():
+        res = {
+        "id": self.id,
+        "time": self.time,
+        "sender_id": self.sender_id,
+        "receiver_id": self.receiver_id,
+        "ride_id": self.ride_id,
+        "message": self.message,
+        }
+        if accepted is not None:
+            res["accepted"] = self.accepted
+        return res

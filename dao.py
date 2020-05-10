@@ -51,5 +51,9 @@ def create_request(ride_id, sender_id, message):
     pass
 
 
+def get_request_by_id(request_id):
+    pass
+
+
 def update_request_by_id(request_id, response):
     pass
