@@ -1,45 +1,37 @@
 # BackendFinalProj
 
-Element Planning:
-
-I am thinking we should have 3 tables(this is just planing if u don't like or it doesn't make sense let me know)
+Database Tables
 
 User:
 
-Store data on user information, and scheduled ride
-
-Client should be able to create a user: -> user id is stored in frontend
-frontend use the id to request the user info (will need to change to credential and extra layer if do authentication)
-
-a client should not be able to get access to all available user
-
-a client should be able to request users that fit the search
-can be implement by
--using parameter and query string (more automate and can handle different combination of parameter work)
--using / / like was done in HW (we know how, might cause error if the input not exact)
-
+    Fields:
+    id: unique user id,
+    username,
+    requests_sent: requests to join other's people's rides, requests_received: requests from others to join your ride(s),
+    rides_created,
+    rides_joined
 
 Ride:
 
-store information on ride id, date,  time, origin, destination, and mode of transportation of the ride
-also creator of the ride and the users who will be joining the ride
+    Fields:
+        id: unique ride id,
+        origin: starting place of the ride,
+        destination: ending place of the ride,
+        scheduled: time the ride leaves in Unix,
+        creator: id of the creator,
+        members: id of people joining the ride,
+        requests: requests to join this ride
 
+Requests:
 
-Request:
-
-Is similar to transaction table we did for venmo
-  (how should this be done? other users request the owner of ride to join? owner request other to join? either one or both which one?)
-contain information on the request to join Ride
-So contain request_id, sender_id, receiver_id, ride_id, accepted, and message
-
-will need to think and define sender and receiver
-
-  Need:
-
-    get request by user_id(sender and receiver)
-    post request(create post)
-    post request(accepted request)
-
+    Fields:
+        id: unique request id,
+        time: time the request is sent,
+        sender_id: id of the sender,
+        receiver_id: id of the owner of the ride,
+        ride_id: id of the ride,
+        message: message from sender to receiver,
+        accepted: status of the request
 
 Basic Flow/interaction
 
@@ -55,11 +47,6 @@ Basic Flow/interaction
    request, create ride
 
 
-
-
-
-
-
 API Specification:
 
     get a user
@@ -73,6 +60,8 @@ API Specification:
             "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
             "requests": [<SERIALIZED REQUEST>, ... ]
           }
+
+
     create a user
     POST "carshare/user/"
     Request
@@ -90,12 +79,12 @@ API Specification:
             "requests": []
           }
 
-    Get relevant ride available
+
+    Get rides that start at the same location, end in the same destination, and scheduled to be within 24 hours starting from the desired time input
     GET "carshare/ride/"
     parameter -o query by origin
     parameter -d query by destination
     parameter -s query by time (unix)
-    NOTE: maybe we can choose all time within the time interval EX 1 day
     Response
       {
         "success": true,
@@ -112,15 +101,15 @@ API Specification:
         }
       }
 
-    Create ride
-    POST "carshare/ride/{user_id}/"
+
+    Create a ride
+    POST "carshare/{user_id}/ride/"
     Request
       {
         "origin": <USER INPUT for ORIGIN>
         "destination":<USER INPUT FOR DESTINATION>,
         "scheduled":<USER INPUT FOR scheduled>,
       }
-
     Response
       {
         "success": true,
@@ -135,25 +124,25 @@ API Specification:
             "request": []    
         }
       }
-      Delete scheduled ride plan
-      DELETE "carshare/ride/{user_id}/{ride_id}/"
-      NOTE: Verify that user_id is the owner of the ride
+
+
+    Delete scheduled ride plan
+    DELETE "carshare/{user_id}/ride/{ride_id}/"
+    NOTE: Verify that user_id is the owner of the ride
         {
           "success": true,
           "data": <DELETED RIDE>
         }
 
 
-      Create Request to join ride
-      POST "carshare/request/{ride_id}"
-      user who want to join send request
+    Create Request to join ride
+    POST "carshare/{user_id}/request/{ride_id}"
         Request
-          {
-            "sender_id":<USER ID>
+            {
             "message":<USER INPUT FOR MESSAGE>
-          }
+            }
         Response
-          {
+            {
             "success": true,
             "data": {
                 "id": <ID>,
@@ -163,25 +152,40 @@ API Specification:
                 "ride_id": <RIDE ID>,
                 "message": <USER INPUT FOR MESSAGE>,
                 "accepted": null
-              }    
+                }    
             }
 
-      Accept "carshare/request/{request_id}"
+
+    POST "/carshare/{user_id}/request/response/{request_id}"
         Request
-          {
+            {
             "accepted": true or false
-          }
+            }
 
         Response
-          {
+            {
             "success": true,
             "data": {
                 "id": <ID>,
-                "timestamp": <NOW> / update timestamp to time of accept/deny
+                "timestamp": <NOW>
                 "sender_id": <USER INPUT FOR SENDER_ID>,
                 "owner_id": <ID OF OWNER OF THE RIDE>,
                 "ride_id": <RIDE ID>,
                 "message": <USER INPUT FOR MESSAGE>,
                 "accepted": <USER INPUT FOR ACCEPTED>
-              }    
+                }    
             }
+
+
+Future Development:
+
+    Frontend use the id to request the user info (will need to change to credential and extra layer if do authentication)
+
+    a client should not be able to get access to all available user
+
+    a client should be able to request users that fit the search
+    can be implement by
+    -using parameter and query string (more automate and can handle different combination of parameter work)
+    -using / / like was done in HW (we know how, might cause error if the input not exact)
+
+    Find rides should be able to search for rides within a radius of the starting and ending locations.
