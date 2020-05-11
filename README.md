@@ -1,5 +1,8 @@
 # BackendFinalProj
 
+Address:
+    http://34.86.45.240
+
 Database Tables
 
 User:
@@ -7,7 +10,8 @@ User:
     Fields:
     id: unique user id,
     username,
-    requests_sent: requests to join other's people's rides, requests_received: requests from others to join your ride(s),
+    requests_sent: requests to join other's people's rides, 
+    requests_received: requests from others to join your ride(s),
     rides_created,
     rides_joined
 
@@ -37,7 +41,7 @@ Requests:
 API Specification:
 
     get a user
-    GET "carshare/user/{user_id}/"
+    GET "/carshare/user/{user_id}/"
         Response
             {
             "success": true,
@@ -50,7 +54,7 @@ API Specification:
 
 
     create a user
-    POST "carshare/user/"
+    POST "/carshare/user/"
         Request
             {
             "username": <USER INPUT>
@@ -68,7 +72,7 @@ API Specification:
 
 
     Get rides that start at the same location, end in the same destination, and scheduled to be within 24 hours starting from the desired time input
-    GET "carshare/ride/"
+    GET "/carshare/ride/"
     parameter -o query by origin
     parameter -d query by destination
     parameter -s query by time (unix)
@@ -91,7 +95,7 @@ API Specification:
 
 
     Create a ride
-    POST "carshare/{user_id}/ride/"
+    POST "/carshare/{user_id}/ride/"
         Request
             {
             "origin": <USER INPUT for ORIGIN>
@@ -114,7 +118,7 @@ API Specification:
 
 
     Delete scheduled ride plan
-    DELETE "carshare/{user_id}/ride/{ride_id}/"
+    DELETE "/carshare/{user_id}/ride/{ride_id}/"
     NOTE: Verify that user_id is the owner of the ride
         Response:
             {
@@ -131,7 +135,7 @@ API Specification:
 
 
     Create Request to join ride
-    POST "carshare/{user_id}/request/{ride_id}"
+    POST "/carshare/{user_id}/request/{ride_id}"
         Request
             {
             "message":<USER INPUT FOR MESSAGE>
