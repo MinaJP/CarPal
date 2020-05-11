@@ -13,7 +13,7 @@ class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
-    requests_sent = db.relationship("Requests", backref = "owner_requests", foreign_keys = 'Requests.sender_id', lazy = "dynamic", cascade = "delete")
+    requests_sent = db.relationship("Requests", foreign_keys = 'Requests.sender_id', cascade = "delete")
     requests_received = db.relationship("Requests",  foreign_keys = 'Requests.receiver_id', cascade = "delete")
     rides_created = db.relationship("Ride", cascade = "delete")
     rides_joined = db.relationship("Ride", secondary = association_table_1, back_populates = "members")

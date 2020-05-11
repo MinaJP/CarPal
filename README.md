@@ -35,104 +35,111 @@ Requests:
 
 Basic Flow/interaction
 
-  -first time user, no stored id -> prompt to create a user -> make a  
-   post request ->store the user id in the app(change to credential if do auth)
-  -have user id ->prompt to search for ride-> get request->return relevant    
-   existing ride
-  -Show the result of the return on a table with option to purpose/create    
-   own ride, (if return None -> display no relevant ride available at this time consider creating you own)
-  -if click existing ride-> prompt user to request to join ride->make
-   post request to the owner of the ride
-  -if click create my own, use existing data(handle in frontend) ->make post   
-   request, create ride
+    -first time user, no stored id -> prompt to create a user -> make a  
+    post request ->store the user id in the app(change to credential if do auth)
+    -have user id ->prompt to search for ride-> get request->return relevant    
+    existing ride
+    -Show the result of the return on a table with option to purpose/create    
+    own ride, (if return None -> display no relevant ride available at this time consider creating you own)
+    -if click existing ride-> prompt user to request to join ride->make
+    post request to the owner of the ride
+    -if click create my own, use existing data(handle in frontend) ->make post   
+    request, create ride
 
 
 API Specification:
 
     get a user
     GET "carshare/user/{user_id}/"
-    Response
-      {
-      "success": true,
-      "data": {            
-            "id": <ID>,
-            "username":<USER INPUT FOR USERNAME>
-            "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
-            "requests": [<SERIALIZED REQUEST>, ... ]
-          }
+        Response
+            {
+            "success": true,
+            "data": {            
+                "id": <ID>,
+                "username":<USER INPUT FOR USERNAME>
+                "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
+                "requests": [<SERIALIZED REQUEST>, ... ]
+            }
 
 
     create a user
     POST "carshare/user/"
-    Request
-      {
-        "username": <USER INPUT>
-      }
-
-    Response
-      {
-      "success": true,
-      "data": {            
-            "id": <ID>,
-            "username":<USER INPUT FOR USERNAME>
-            "scheduled_ride": [],
-            "requests": []
-          }
-
+        Request
+            {
+            "username": <USER INPUT>
+            }
+        Response
+            {
+            "success": true,
+            "data": {            
+                "id": <ID>,
+                "username":<USER INPUT FOR USERNAME>
+                "scheduled_ride": [],
+                "requests": []
+                }
+            }
 
     Get rides that start at the same location, end in the same destination, and scheduled to be within 24 hours starting from the desired time input
     GET "carshare/ride/"
     parameter -o query by origin
     parameter -d query by destination
     parameter -s query by time (unix)
-    Response
-      {
-        "success": true,
-        "data": {
-            "id": <id>,
-            "origin": <USER INPUT FOR ORIGIN>,
-            "destination": <USER INPUT FOR DESTINATION>,
-            "scheduled": <USER INPUT FOR scheduled>,
-            "completed": <USER INPUT FOR completed>,
-            "owner": <USER ID>
-            "details":<USER INPUT FOR details>,
-            "members" [<SERIALIZED USER WITHOUT RIDE and REQUEST FIELD>, ... ]
-            "request": [<SERIALIZED REQUEST WITHOUT RIDE FIELD>, ... ]    
-        }
-      }
+        Response
+            {
+            "success": true,
+            "data": {
+                "id": <id>,
+                "origin": <USER INPUT FOR ORIGIN>,
+                "destination": <USER INPUT FOR DESTINATION>,
+                "scheduled": <USER INPUT FOR scheduled>,
+                "creator": <USER ID>
+                "members" [<SERIALIZED USER WITHOUT RIDE and REQUEST FIELD>, ... ]
+                "request": [<SERIALIZED REQUEST WITHOUT RIDE FIELD>, ... ]    
+                }
+                {
+                ...
+                }
+            }
 
 
     Create a ride
     POST "carshare/{user_id}/ride/"
-    Request
-      {
-        "origin": <USER INPUT for ORIGIN>
-        "destination":<USER INPUT FOR DESTINATION>,
-        "scheduled":<USER INPUT FOR scheduled>,
-      }
-    Response
-      {
-        "success": true,
-        "data": {
-            "id": <id>,
-            "origin": <USER INPUT FOR ORIGIN>,
-            "destination": <USER INPUT FOR DESTINATION>,
-            "scheduled": <USER INPUT FOR scheduled>,
-            "completed": False,
-            "creator": <USER_ID>
-            "members" []
-            "request": []    
-        }
-      }
+        Request
+            {
+            "origin": <USER INPUT for ORIGIN>
+            "destination":<USER INPUT FOR DESTINATION>,
+            "scheduled":<USER INPUT FOR scheduled>,
+            }
+        Response
+            {
+            "success": true,
+            "data": {
+                "id": <id>,
+                "origin": <USER INPUT FOR ORIGIN>,
+                "destination": <USER INPUT FOR DESTINATION IN UNIX>,
+                "scheduled": <USER INPUT FOR scheduled>,
+                "creator": <USER_ID>
+                "members" []
+                "request": []    
+                }
+            }
 
 
     Delete scheduled ride plan
     DELETE "carshare/{user_id}/ride/{ride_id}/"
     NOTE: Verify that user_id is the owner of the ride
-        {
-          "success": true,
-          "data": <DELETED RIDE>
-        }
+        Response:
+            {
+            "success": true,
+            "data": {
+                "id": <ID>,
+                "timestamp": <NOW>,
+                "creator": <ID OF OWNER OF THE RIDE>,
+                "ride_id": <RIDE ID>,
+                "message": <USER INPUT FOR MESSAGE>,
+                "accepted": <USER INPUT FOR ACCEPTED>
+                }    
+            }
 
 
     Create Request to join ride
@@ -147,8 +154,8 @@ API Specification:
             "data": {
                 "id": <ID>,
                 "timestamp": <NOW>,
-                "sender_id": <USER INPUT FOR SENDER_ID>,
-                "owner_id": <ID OF OWNER OF THE RIDE>,
+                "sender_id": <ID OF USER>,
+                "receiver_id": <ID OF OWNER OF THE RIDE>,
                 "ride_id": <RIDE ID>,
                 "message": <USER INPUT FOR MESSAGE>,
                 "accepted": null
@@ -161,7 +168,6 @@ API Specification:
             {
             "accepted": true or false
             }
-
         Response
             {
             "success": true,
@@ -169,7 +175,7 @@ API Specification:
                 "id": <ID>,
                 "timestamp": <NOW>
                 "sender_id": <USER INPUT FOR SENDER_ID>,
-                "owner_id": <ID OF OWNER OF THE RIDE>,
+                "creator": <ID OF OWNER OF THE RIDE>,
                 "ride_id": <RIDE ID>,
                 "message": <USER INPUT FOR MESSAGE>,
                 "accepted": <USER INPUT FOR ACCEPTED>
@@ -189,3 +195,7 @@ Future Development:
     -using / / like was done in HW (we know how, might cause error if the input not exact)
 
     Find rides should be able to search for rides within a radius of the starting and ending locations.
+
+    Mark requests false if ride's scheduled time passes current timestamp
+
+    Mark rides completed if ride's scheduled time passes current timestamp
