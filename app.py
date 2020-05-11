@@ -47,11 +47,13 @@ def get_a_user(user_id):
 
 @app.route("/carshare/user/", methods=['POST'])
 def create_a_user():
+    print("Creating a new user")
     body = json.loads(request.data)
     key = ("username")
-    check_key, error = check_key(key, body)
-    if not check_key:
-        return failure_response(error)
+    print("Checking for key")
+    checkkey = check_key(key,body)
+    if not checkkey:
+        return failure_response(checkkey)
     username = body["username"]
     return success_response(dao.create_user(username))
 
@@ -61,78 +63,107 @@ def find_rides():
     args = request.args
     print(args)
     key = ("o", "d", "s")
-    check_args, error = check_key(key, args)
+    check_args = check_key(key, args)
     if not check_args:
         return failure_response("incomplete information")
     origin = args["o"]
     destination = args["d"]
-    scheduled = args["s"]
+    scheduled = int(args["s"])
     print(origin, destination, scheduled)
     return success_response(dao.get_rides(origin, destination, scheduled))
 
 
-@app.route("/carshare/ride/<int:user_id>/", methods=['POST'])
-def create_ride():
+@app.route("/carshare/<int:user_id>/ride/", methods=['POST'])
+def create_ride(user_id):
     body = json.loads(request.data)
     verify_id = dao.get_user_by_id(user_id)
     if verify_id is None:
         return failure_response("invalid user id")
+
     key = ("origin", "destination", "scheduled")
-    check_key, error = check_key(key, body)
+    checkkey = check_key(key, body)
     if not check_key:
-        return failure_response(error)
+        return failure_response(checkkey)
+
     origin = body["origin"]
     destination = body["destination"]
     scheduled = body["scheduled"]
     return success_response(dao.create_ride(user_id, origin, destination, scheduled))
 
 
-# would be good if can verify if the user_id match the owner of the ride id
-@app.route("/carshare/ride/{user_id}/{ride_id}/", methods=['DELETE'])
-def delete_ride():
-    ride = dao.delete_by_id(ride_id)
+@app.route("/carshare/<int:user_id>/ride/<int:ride_id>/", methods=['DELETE'])
+def delete_ride(user_id, ride_id):
+
+    #Check if user owns this ride
+    creator = dao.get_ride_by_id(ride_id)["creator"]
+    if creator != user_id:
+        return failure_response("You do not own this event.")
+
+    ride = dao.delete_ride_by_id(ride_id)
     if ride is not None:
         return success_response(ride)
     return failure_response("ride not found")
 
 
-@app.route("/carshare/request/<int:ride_id>", methods=['POST'])
-def request_ride(ride_id):
+@app.route("/carshare/<int:user_id>/request/<int:ride_id>/", methods=['POST'])
+def request_ride(user_id, ride_id):
+    body = json.loads(request.data)
+    #Check if ride exists
     ride = dao.get_ride_by_id(ride_id)
     if ride is None:
         return failure_response("ride not exist")
-    receiver_id = ride["creator"]
-    body = json.loads(request.data)
-    key = ("sender_id", "message")
-    check_key, error = check_key(key, body)
-    if not check_key:
-        return failure_response(error)
-    sender_id = body["sender_id"]
-    user = dao.get_user_by_id(sender_id)
-    if user in None:
+
+    #Check if user exists
+    sender = dao.get_user_by_id(user_id)
+    if sender is None:
         return failure_response("not valid user id")
+
+    #Check if data contains all required fields
+    key = ("message")
+    checkkey = check_key(key, body)
+    if not check_key:
+        return failure_response(checkkey)
+
     message = body["message"]
-    return success(dao.create_request(ride_id, sender_id, receiver_id, message))
+    receiver_id = ride["creator"]
+
+    return success_response(dao.create_request(ride_id, user_id, receiver_id, message))
 
 
-@app.route("/carshare/request/<int:request_id>", methods=['POST'])
-def update_request(request_id):
+@app.route("/carshare/<int:user_id>/request/response/<int:request_id>/", methods=['POST'])
+def update_request(user_id, request_id):
+    #Check if request exists
     req = dao.get_request_by_id(request_id)
     if req is None:
-        return failure_response("request id is invalid")
-    member_id = req["sender_id"]
+        return failure_response("Request id is invalid.")
+
+    #Check if user_id is the receiver_id of the request
+    receiver = req["receiver_id"]
+    if receiver != user_id:
+        return failure_response("You do not have permission to change the status of this request.")
+
+
     ride_id = req["ride_id"]
     body = json.loads(request.data)
+
+    #Check if the data body contains required keys
     key = ("accepted")
-    check_key, error = check_key(key, body)
+    checkkey = check_key(key, body)
     if not check_key:
-        return failure_response(error)
-    re = body["accepted"]
-    if re:
-        up = dao.update_ride_by_id(ride_id, member_id)
-        if up is None:
-            return failure_response("invalid ride or sender_id")
-    return success_response(dao.update_request_by_id(request_id, re))
+        return failure_response(checkkey)
+
+    #Check if the user has already answered to this request
+    status = req["accepted"]
+    if status is not None:
+        return failure_response("You have changed the status of this request before.")
+
+    response = body["accepted"]
+    up = dao.update_ride_by_id(ride_id, req["sender_id"])
+
+    if up is None:
+        return failure_response("invalid ride or sender_id")
+
+    return success_response(dao.update_request_by_id(request_id, response))
 
 
 if __name__ == "__main__":

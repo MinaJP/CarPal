@@ -13,8 +13,8 @@ class User(db.Model):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
-    requests_sent = db.relationship("Request", cascade = "delete", foreign_keys = 'requests.sender_id' )
-    requests_received = db.relationship("Request", cascade= "delete", foreign_keys = 'requests.receiver_id')
+    requests_sent = db.relationship("Requests", backref = "owner_requests", foreign_keys = 'Requests.sender_id', lazy = "dynamic", cascade = "delete")
+    requests_received = db.relationship("Requests",  foreign_keys = 'Requests.receiver_id', cascade = "delete")
     rides_created = db.relationship("Ride", cascade = "delete")
     rides_joined = db.relationship("Ride", secondary = association_table_1, back_populates = "members")
 
@@ -46,7 +46,7 @@ class Ride(db.Model):
     scheduled = db.Column(db.Integer, nullable = False)
     creator = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     members = db.relationship("User", secondary = association_table_1, back_populates = "rides_joined")
-    requests = db.relationship("Ride", cascade = "delete")
+    requests = db.relationship("Requests", cascade = "delete")
 
 
     def serialize(self):
@@ -71,18 +71,18 @@ class Ride(db.Model):
 
 
 
-class Request(db.Model):
+class Requests(db.Model):
     __tablename__ = "requests"
     id = db.Column(db.Integer, primary_key=True)
     time = db.Column(db.Integer, nullable = False)
-    sender_id = db.relationship(db.Integer, db.ForeignKey("users.id"))
-    receiver_id = db.relationship(db.Integer, db.ForeignKey("users.id"))
-    ride_id = db.relationship(db.Integer, db.ForeignKey("rides.id"))
+    sender_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    receiver_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    ride_id = db.Column(db.Integer, db.ForeignKey("rides.id"))
     message = db.Column(db.String, nullable = False)
     accepted = db.Column(db.Boolean)
 
 
-    def serialize():
+    def serialize(self):
         res = {
         "id": self.id,
         "time": self.time,
@@ -90,7 +90,8 @@ class Request(db.Model):
         "receiver_id": self.receiver_id,
         "ride_id": self.ride_id,
         "message": self.message,
+        "accepted": self.accepted
         }
-        if accepted is not None:
-            res["accepted"] = self.accepted
+        """if self.accepted is not None:
+            res["accepted"] = self.accepted"""
         return res

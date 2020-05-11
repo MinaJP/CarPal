@@ -1,10 +1,10 @@
-from db import User, Ride, Request
+from db import db, User, Ride, Requests
 import time
+
+
 # get user by id
 # Parameter: id
 # Precondition: id is a integer
-
-
 def get_user_by_id(id):
     usr = User.query.filter_by(id=id).first()
     if usr is not None:
@@ -68,32 +68,42 @@ def get_ride_by_id(ride_id):
 
 # add another user to members list of a car ride
 def update_ride_by_id(ride_id, member_id):
-    ride = Ride.query.filter_by(id=ride_id)
-    member = User.query.filter_by(id=member_id)
+    ride = Ride.query.filter_by(id=ride_id).first()
+    member = User.query.filter_by(id=member_id).first()
+
     if member is None or ride is None:
         return None
     ride.members.append(member)
+
     db.session.commit()
+
+    return ride.serialize()
 
 
 def create_request(ride_id, sender_id, receiver_id, message):
     t = int(time.time())
-    req = Request(time=t, sender_id=sender_id,
-                  receiver_id=receiver_id, message=message, accepted=None)
+    req = Requests(
+        time=t,
+        ride_id = ride_id,
+        sender_id = sender_id,
+        receiver_id = receiver_id,
+        message=message,
+        accepted = None
+    )
     db.session.add(req)
     db.session.commit()
     return req.serialize()
 
 
 def get_request_by_id(request_id):
-    req = Request.query.filter_by(id=request_id).first()
+    req = Requests.query.filter_by(id=request_id).first()
     if req is not None:
         return req.serialize()
     return req
 
 
 def update_request_by_id(request_id, response):
-    req = Request.query.filter_by(id=request_id)
+    req = Requests.query.filter_by(id=request_id).first()
     req.accepted = response
     db.session.commit()
     return req.serialize()
