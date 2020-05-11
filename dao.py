@@ -73,6 +73,7 @@ def update_ride_by_id(ride_id, member_id):
 
     if member is None or ride is None:
         return None
+        
     ride.members.append(member)
 
     db.session.commit()
