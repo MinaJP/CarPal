@@ -47,10 +47,8 @@ def get_a_user(user_id):
 
 @app.route("/carshare/user/", methods=['POST'])
 def create_a_user():
-    print("Creating a new user")
     body = json.loads(request.data)
     key = ("username")
-    print("Checking for key")
     checkkey = check_key(key,body)
     if not checkkey:
         return failure_response(checkkey)
@@ -61,7 +59,6 @@ def create_a_user():
 @app.route("/carshare/ride/")
 def find_rides():
     args = request.args
-    print(args)
     key = ("o", "d", "s")
     check_args = check_key(key, args)
     if not check_args:
