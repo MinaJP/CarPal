@@ -66,6 +66,7 @@ API Specification:
                 }
             }
 
+
     Get rides that start at the same location, end in the same destination, and scheduled to be within 24 hours starting from the desired time input
     GET "carshare/ride/"
     parameter -o query by origin
