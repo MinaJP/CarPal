@@ -1,4 +1,4 @@
-# BackendFinalProj
+# CarPal
 
 Address:
     http://34.86.45.240
