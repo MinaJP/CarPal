@@ -43,8 +43,8 @@
 
 <h2> API Specification: </h2>
 
-    get a user
-    GET "/carshare/user/{user_id}/"
+<h4> get a user </h4>
+        `GET "/carshare/user/{user_id}/"
         Response
             {
             "success": true,
@@ -53,7 +53,7 @@
                 "username":<USER INPUT FOR USERNAME>
                 "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
                 "requests": [<SERIALIZED REQUEST>, ... ]
-            }
+            }`
 
 
     create a user
