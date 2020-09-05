@@ -3,12 +3,12 @@
 <p> A ride-sharing IOS app that allows Cornell students to schedule rides with fellow students who depart from and arrive at similar locations. </p>
 
 
-Address:
+<h2> Address: </h2>
     http://34.86.45.240 (down)
 
-Database Tables
+<h2> Database Tables </h2>
 
-User:
+<h3> User: </h3>
 
     Fields:
     id: unique user id,
@@ -18,7 +18,7 @@ User:
     rides_created,
     rides_joined
 
-Ride:
+<h3> Ride: </h3>
 
     Fields:
         id: unique ride id,
@@ -29,7 +29,7 @@ Ride:
         members: id of people joining the ride,
         requests: requests to join this ride
 
-Requests:
+<h3> Requests: </h3>
 
     Fields:
         id: unique request id,
@@ -41,7 +41,7 @@ Requests:
         accepted: status of the request
 
 
-API Specification:
+<h2> API Specification: </h2>
 
     get a user
     GET "/carshare/user/{user_id}/"
@@ -178,7 +178,7 @@ API Specification:
             }
 
 
-Future Development:
+<h2> Future Development: </h2>
 
     Frontend use the id to request the user info (will need to change to credential and extra layer if do authentication)
 
