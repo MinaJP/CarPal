@@ -43,7 +43,7 @@
 
 <h2> API Specification: </h2>
 
-<h4> get a user </h4>
+<h4> Get a user </h4>
 <pre>
 <code>
 GET "/carshare/user/{user_id}/"
@@ -60,7 +60,7 @@ Response
 </pre>
 
 
-<h4> create a user </h4>
+<h4> Create a user </h4>
 <pre>
 <code>
 POST "/carshare/user/"
