@@ -1,7 +1,31 @@
 
 #Don't track
-venv/
+**/venv/
 
 
-*.db
-*.pyc
+**/*.db
+**/*.pyc
+
+# Xcode per-user config
+**/*.mode1
+**/*.mode1v3
+**/*.mode2v3
+**/*.perspective
+**/*.perspectivev3
+**/*.pbxuser
+**/*.xcworkspace
+**/xcuserdata
+
+# Build products
+**/build/
+**/*.o
+**/*.LinkFileList
+**/*.hmap
+
+# Automatic backup files
+**/*~.nib/
+**/*.swp
+**/*~
+**/*.dat
+**/*.dep
+

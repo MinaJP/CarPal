@@ -1,0 +1,7 @@
+
+#Don't track
+venv/
+
+
+*.db
+*.pyc
