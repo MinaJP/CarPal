@@ -213,8 +213,10 @@ Response
 
 <li> a client should be able to request users that fit the search
 can be implement by
-<li> using parameter and query string (more automate and can handle different combination of parameter work) </li>
-<li> using / / like was done in HW (we know how, might cause error if the input not exact) </li>
+    <ul>
+        <li> using parameter and query string (more automate and can handle different combination of parameter work) </li>
+        <li> using / / like was done in HW (we know how, might cause error if the input not exact) </li>
+    </ul>
 </li>
 
 <li>Find rides should be able to search for rides within a radius of the starting and ending locations.</li>
