@@ -1,5 +1,6 @@
-<h1> CarPal </h1> <p1> Project is in progress. </p1>
-A ride-sharing IOS app that allows Cornell students to schedule rides with fellow students who depart from and arrive at similar locations.
+<h1> CarPal </h1> 
+<p> Project is in progress. </p>
+<p> A ride-sharing IOS app that allows Cornell students to schedule rides with fellow students who depart from and arrive at similar locations. </p>
 
 
 Address:
