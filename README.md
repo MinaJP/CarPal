@@ -225,3 +225,7 @@ can be implement by
 
 <li>Mark rides completed if ride's scheduled time passes current timestamp</li>
 </ul>
+
+<h2> Authors </h2>
+Doanh Tran, Mina Prapakamol
+
