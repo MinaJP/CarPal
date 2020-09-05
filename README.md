@@ -206,18 +206,19 @@ Response
 
 
 <h2> Future Development: </h2>
+<ul>
+Frontend use the id to request the user info (will need to change to credential and extra layer if do authentication)
 
-    Frontend use the id to request the user info (will need to change to credential and extra layer if do authentication)
+a client should not be able to get access to all available user
 
-    a client should not be able to get access to all available user
+a client should be able to request users that fit the search
+can be implement by
+-using parameter and query string (more automate and can handle different combination of parameter work)
+-using / / like was done in HW (we know how, might cause error if the input not exact)
 
-    a client should be able to request users that fit the search
-    can be implement by
-    -using parameter and query string (more automate and can handle different combination of parameter work)
-    -using / / like was done in HW (we know how, might cause error if the input not exact)
+Find rides should be able to search for rides within a radius of the starting and ending locations.
 
-    Find rides should be able to search for rides within a radius of the starting and ending locations.
+Mark requests false if ride's scheduled time passes current timestamp
 
-    Mark requests false if ride's scheduled time passes current timestamp
-
-    Mark rides completed if ride's scheduled time passes current timestamp
+Mark rides completed if ride's scheduled time passes current timestamp
+</ul>
