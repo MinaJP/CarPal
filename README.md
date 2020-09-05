@@ -1,7 +1,9 @@
 # CarPal
+A ride-sharing IOS app that allows Cornell students to schedule rides with fellow students who depart from and arrive at similar locations.
+
 
 Address:
-    http://34.86.45.240
+    http://34.86.45.240 (down)
 
 Database Tables
 
