@@ -4,10 +4,10 @@
 
 
 <h2> iOS Interface: </h2>
-<div>
-    <img src = "./readMeAsset/screen2.png" height='240'> 
-    <img src = "./readMeAsset/screen1.png" height='240'> 
-    <img src = "./readMeAsset/screen3.png" height='240'> 
+<div align='center'>
+    <img src = "./readMeAsset/screen2.png" height='400'> 
+    <img src = "./readMeAsset/screen1.png" height='400'> 
+    <img src = "./readMeAsset/screen3.png" height='400'> 
 </div>
 
 
