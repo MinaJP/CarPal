@@ -2,6 +2,8 @@
 <p> Project is in progress. </p>
 <p> A ride-sharing IOS app that allows Cornell students to schedule rides with fellow students who depart from and arrive at similar locations. </p>
 
+<h2> User Interface: </h2>
+
 
 <h2> Address: </h2>
     http://34.86.45.240 (down)
@@ -43,8 +45,8 @@
 
 <h2> API Specification: </h2>
 
-<h4> get a user </h4>
-        `GET "/carshare/user/{user_id}/"
+    get a user
+    GET "/carshare/user/{user_id}/"
         Response
             {
             "success": true,
@@ -53,7 +55,7 @@
                 "username":<USER INPUT FOR USERNAME>
                 "scheduled_ride": [ <SERIALIZED RIDE>, ... ],
                 "requests": [<SERIALIZED REQUEST>, ... ]
-            }`
+            }
 
 
     create a user
