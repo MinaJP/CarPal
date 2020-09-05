@@ -5,7 +5,7 @@
 
 <h2> iOS Interface: </h2>
 <div>
-    <img src = "/readMeAsset/Screen Shot 2563-09-05 at 12.21.12" >
+    <img src = "./readMeAsset/Screen Shot 2563-09-05 at 12.21.12" >
 
 
 
